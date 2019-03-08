@@ -1,0 +1,5 @@
+Dark Hex Server
+
+python3 DarkHexMain.py
+
+Comment/Uncomment lines 6 and 9 in DarkHexMain.py to change between Human vs Random and Random vs Random.

@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\lhead{CMPUT497-B2}
+\rhead{Joseph Meleshko}
+
+\begin{document}
+
+\section*{Project Proposal: Dark Hex}
+
+\subsection*{Dark Hex}
+
+\noindent Dark Hex, (or Kriegspiel Hex, Phantom Hex) is a variant of the game Hex in which the players’ pieces are not made visible to their opponents until there is a collision in placement.
+Dark Hex, is similar to its parent, Hex, in that it is a deterministic, finite, and alternate turn game.
+It differs though, turning a perfect information game into an imperfect but complete information game.
+I chose Dark Hex since I've already had some experience working with the game, and I found it extremely interesting.
+As I understand there aren't many projects based on playing Dark Hex so a player would be a novel endeavor.
+
+\subsection*{Project}
+
+\noindent I intend to implement a simple visualizer/interface and a player.
+I will start by implementing a simple protocol for communication between players, based on HTP/GTP. (Go Text Protocol/Hex Text Protocol)
+Those protocols work for Hex and Go respectively, but being an imperfect information game and sometimes requiring multiple queries to a player per move will require a modified protocol.
+Afterwards, a simple text visualizer in the terminal to begin testing and interacting with the player.
+Time permitting, I may implement a better visualizer with a simple graphical interface rather than the text based terminal interface.
+The main component, will be a player for Dark Hex.
+My initial plan is to make a player for small Dark Hex boards, and see how it preforms and what improvements could be made to it.
+A few improvements would be attempting to integrate some tools/algorithms from regular Hex such as dead cell pruning and others into a player for Dark Hex.
+Working out a simple endgame solver to find forced wins would be a boon and also non-trivial given the imperfect information nature of Dark Hex.
+Most of the code specific to Dark Hex will be my own, however some utilities from regular Hex playing may be used in attempting to make the player stronger.
+I am the sole contributor to this project, so I will be responsible for all of the work.
+I don't know how much time this project will take to complete, and the more time given will likely result in increasing the strength of the player.
+
+\newpage
+\subsection*{Resources}
+
+\noindent \href{https://www.hexwiki.net/index.php/Main_Page}{Hex Wiki} is a resource with general information about Hex, which likely will be useful in building a Dark Hex player.\\
+\noindent The \href{http://webdocs.cs.ualberta.ca/~hayward/hex/}{University Of Alberta Computer Hex Group} has many useful discoveries and utilities for Hex, several of which will likely be at least somewhat applicable to playing Dark Hex, pruning dead cells from search for instance.
+
+\end{document}
