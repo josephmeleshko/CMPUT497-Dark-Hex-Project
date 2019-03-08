@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\lhead{CMPUT497-B2}
+\rhead{Joseph Meleshko}
+
+\begin{document}
+
+\section*{Progress Report: Dark Hex Project}
+
+At this point, I have finished the framework for interacting with Dark Hex.
+My code so far can be found on \href{https://github.com/josephmeleshko/CMPUT497-Dark-Hex-Project}{GitHub}.
+I have a working server written in python that manages the game and two trivial players to interact with it.
+Since Dark Hex is an imperfect information game, a server to moderate a connection needs to handle the information both players have.
+My server keeps track of a board state and also what each player knows.
+When it is time for a player to move, the server builds an array representing the board as the player knows it,
+keeping hidden the opponent's moves that they haven't discovered yet.
+If the player makes a move that collides with the opponent, the server updates the player's knowledge and then queries them for a new move.
+It provides the players with information on how the game is progressing,
+alerting them if they collided with the opponent or succeeded and the opponent has made a move.
+It also keeps time for each player, notifying them how much time they have used on each turn,
+tracking total time that it takes for them to make a move that doesn't collide with the opponent.
+It currently doesn't punish the players for exceeding the time, but it is prepared to enforce it if needed.
+Also included are the two trivial players, a player that just makes a random legal move, and a player that queries the standard input for a move.
+This means that as of now, a human can play a game against a random player.
+To play against the random player, run "python3 DarkHexMain.py", to see two random players uncomment line 9 and comment out line 6 and run the same command.
+The next steps are to implement an proper agent for the game, though I've currently been too preoccupied to start on it as of yet.
+
+\subsection*{Github}
+https://github.com/josephmeleshko/CMPUT497-Dark-Hex-Project
+\end{document}
