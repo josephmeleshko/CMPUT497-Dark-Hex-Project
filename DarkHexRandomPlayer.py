@@ -8,7 +8,7 @@ class DarkHexRandomPlayer(object):
         self.rows = rows
         self.columns = columns
 
-    def genmove(self, board, time, status):
+    def genmove(self, board, unknownPieces, time, status):
         moves = list(enumerate(board))
         random.shuffle(moves)
         i = 0

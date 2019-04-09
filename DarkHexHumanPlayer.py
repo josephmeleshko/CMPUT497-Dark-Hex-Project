@@ -11,7 +11,7 @@ class DarkHexHumanPlayer(object):
         self.rows = rows
         self.columns = columns
 
-    def genmove(self, board, time, status):
+    def genmove(self, board, unknownPieces, time, status):
         print(status)
         print(time, "Time Remaining")
         DarkHexUtilities.prettyBoard(board, self.rows, self.columns)

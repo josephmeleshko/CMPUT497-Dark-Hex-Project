@@ -2,4 +2,7 @@ Dark Hex Server
 
 python3 DarkHexMain.py
 
-Comment/Uncomment lines 6 and 9 in DarkHexMain.py to change between Human vs Random and Random vs Random.
+Follow instructions to configure game.
+Mohex agent requires mohex executable installed somewhere on system, location can be specified in setup.
+
+Manual mode can be enabled by editing DarkHexMain.py and manually configuring the settings for the Dark Hex Server instead of following the setup procedure that is the result of just running DarkHexMain.py

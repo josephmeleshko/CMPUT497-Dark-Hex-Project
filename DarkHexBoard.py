@@ -9,6 +9,8 @@ class DarkHexBoard(object):
         self.whitePieces = [0]*(rows*columns)
         self.blackInformation = [0]*(rows*columns)
         self.whiteInformation = [0]*(rows*columns)
+        self.hiddenBlackPieces = 0
+        self.hiddenWhitePieces = 0
 
     def index(self, row, column):
         """
@@ -24,8 +26,8 @@ class DarkHexBoard(object):
 
         return: 0 = Success
                 1 = Out of bounds
-                2 = Occupied by self
-                3 = Occupied by opponent (information updated)
+                2 = Occupied (information not updated)
+                3 = Occupied (information updated)
                 4 = Unknown error
         """
 
@@ -36,24 +38,28 @@ class DarkHexBoard(object):
 
         if self.blackPieces[index] == 1:
             if colour == 1:
-                self.whiteInformation[index] = 1
-                return 3
-            else:
-                return 2
+                if self.whiteInformation[index] == 0:
+                    self.whiteInformation[index] = 1
+                    self.hiddenBlackPieces -= 1
+                    return 3
+            return 2
         elif self.whitePieces[index] == 1:
             if colour == 0:
-                self.blackInformation[index] = 1
-                return 3
-            else:
-                return 2
+                if self.blackInformation[index] == 0:
+                    self.blackInformation[index] = 1
+                    self.hiddenWhitePieces -= 1
+                    return 3
+            return 2
 
         if colour == 0:
             self.blackPieces[index] = 1
             self.blackInformation[index] = 1
+            self.hiddenBlackPieces += 1
             return 0
         elif colour == 1:
             self.whitePieces[index] = 1
             self.whiteInformation[index] = 1
+            self.hiddenWhitePieces += 1
             return 0
 
         return 4
@@ -89,64 +95,53 @@ class DarkHexBoard(object):
         return playerBoard
 
     def checkBlackWin(self):
-        """
-        return: True if Black has won otherwise False
-        """
-        activeSet = set()
+        markedCells = set()
         for column in range(self.columns):
             if self.blackPieces[self.index(0, column)]:
-                activeSet.add((0, column))
-        while len(activeSet) > 0:
-            cell = activeSet.pop()
-            neighbours = self.getBlackNeighbours(cell)
-            for n in neighbours:
-                if n[0] + 1 == self.rows:
+                markedCells.add((0, column))
+        newCells = markedCells.copy()
+        while len(newCells) > 0:
+            neighbours = self.getNeighbours(newCells.pop())
+            for cell in neighbours:
+                if not self.blackPieces[self.index(cell[0], cell[1])]:
+                    continue
+                if cell[0] == self.rows - 1:
                     return True
-                activeSet.add(n)
+                if cell not in markedCells:
+                    newCells.add(cell)
+                    markedCells.add(cell)
         return False
-
-    def getBlackNeighbours(self, cell):
-        """
-        return: neighbours below and to the right
-        """
-        returnSet = []
-        if cell[1] != 0:
-            if self.blackPieces[self.index(cell[0] + 1, cell[1] - 1)] == 1:
-                returnSet.append((cell[0] + 1, cell[1] - 1))
-        if cell[1] + 1 != self.columns:
-            if self.blackPieces[self.index(cell[0], cell[1] + 1)] == 1:
-                returnSet.append((cell[0], cell[1] + 1))
-        if self.blackPieces[self.index(cell[0] + 1, cell[1])] == 1:
-            returnSet.append((cell[0]+1, cell[1]))
-        return returnSet
 
     def checkWhiteWin(self):
-        """
-        return: True if White has won otherwise False
-        """
-        activeSet = set()
+        markedCells = set()
         for row in range(self.rows):
             if self.whitePieces[self.index(row, 0)]:
-                activeSet.add((row, 0))
-        while len(activeSet) > 0:
-            cell = activeSet.pop()
-            neighbours = self.getWhiteNeighbours(cell)
-            for n in neighbours:
-                if n[1] + 1 == self.columns:
-                    return True
-                activeSet.add(n)
+                markedCells.add((row, 0))
+        newCells = markedCells.copy()
+        while len(newCells) > 0:
+            neighbours = self.getNeighbours(newCells.pop())
+            for cell in neighbours:
+                if self.whitePieces[self.index(cell[0], cell[1])]:
+                    if cell[1] == self.columns - 1:
+                        return True
+                    if cell not in markedCells:
+                        newCells.add(cell)
+                        markedCells.add(cell)
         return False
 
-    def getWhiteNeighbours(self, cell):
-        """
-        return: neighbours to the right and below
-        """
-        returnSet = []
-        if cell[0] != 0:
-            if self.whitePieces[self.index(cell[0] - 1, cell[1] + 1)] == 1:
-                returnSet.append((cell[0] - 1, cell[1] + 1))
-            if self.blackPieces[self.index(cell[0] - 1, cell[1])] == 1:
-                returnSet.append((cell[0] - 1, cell[1]))
-        if self.whitePieces[self.index(cell[0], cell[1] + 1)] == 1:
-            returnSet.append((cell[0], cell[1] + 1))
-        return returnSet
+    def getNeighbours(self, cell):
+        returnList = []
+        if cell[0] > 0:
+            returnList.append((cell[0] - 1, cell[1]))
+        if cell[0] < self.rows - 1:
+            returnList.append((cell[0] + 1, cell[1]))
+        if cell[1] > 0:
+            returnList.append((cell[0], cell[1] - 1))
+        if cell[1] < self.columns - 1:
+            returnList.append((cell[0], cell[1] + 1))
+        if cell[0] > 0 and cell[1] < self.columns - 1:
+            returnList.append((cell[0] - 1, cell[1] + 1))
+        if cell[0] < self.rows - 1 and cell[1] > 0:
+            returnList.append((cell[0] + 1, cell[1] - 1))
+        return returnList
+
